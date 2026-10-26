@@ -41,3 +41,7 @@ Point `NEXT_PUBLIC_API_BASE_URL`, `NEXT_PUBLIC_STORAGE_URL`, and `NEXT_PUBLIC_SO
 ## Author
 
 Built by **Minhal128**.
+
+## Docs
+
+Open [docs/index.html](./docs/index.html) in a browser for the full product documentation (install, features, deployment).
