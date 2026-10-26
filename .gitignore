@@ -1,0 +1,26 @@
+﻿# deps / build
+node_modules/
+.next/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# env / secrets
+.env
+.env.*
+!.env.example
+!.env*.example
+
+# uploads / local data
+uploads/
+storage/
+*.log
+.DS_Store
+Thumbs.db
+__MACOSX/
+
+# IDE
+.idea/
+.vscode/
+*.swp
