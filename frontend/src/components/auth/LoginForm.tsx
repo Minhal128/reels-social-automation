@@ -1,7 +1,7 @@
 'use client'
 import AuthInput from '@/components/auth/AuthInput'
 import { Button } from '@/components/ui/button'
-import { ROUTES } from '@/constants/routes'
+import { ROUTES, getSafeRedirect } from '@/constants/routes'
 import { useGetDemoCredentialsQuery, useLoginMutation } from '@/redux/api/authApi'
 import { useAppDispatch } from '@/redux/hooks'
 import { setAuth } from '@/redux/slices/authSlice'
@@ -66,13 +66,7 @@ const LoginForm = () => {
       toast.success(response.message || t('login_successful'))
 
       // Redirect to specified path or default dashboard
-      const redirectTo = searchParams.get('redirect_to')
-      // Same-origin paths only: blocks open redirects like ?redirect_to=https://evil.com or //evil.com
-      if (redirectTo && /^\/(?![/\\])/.test(redirectTo)) {
-        router.replace(redirectTo)
-      } else {
-        router.replace(ROUTES.DASHBOARD)
-      }
+      router.replace(getSafeRedirect(searchParams.get('redirect_to')) || ROUTES.DASHBOARD)
     } catch (error) {
       const apiError = error as ApiError
       const errorMessage = apiError?.data?.message || t('login_failed')

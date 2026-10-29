@@ -24,12 +24,13 @@ export default function SocialMediaShowcase({ data }: { data?: LandingPageData['
 
   const [activeTab, setActiveTab] = useState(initialTab)
 
-  // Update active tab when dynamic platforms load
+  // Fall back to the first platform only when the selected one is missing; resetting on every new
+  // `platforms` reference (refetch) snapped the user's tab back to Instagram
   useEffect(() => {
-    if (dynamicPlatforms.length > 0) {
+    if (dynamicPlatforms.length > 0 && !dynamicPlatforms.some((p: DynamicPlatform) => p.name?.toLowerCase() === activeTab)) {
       setActiveTab(dynamicPlatforms[0]?.name?.toLowerCase())
     }
-  }, [dynamicPlatforms])
+  }, [dynamicPlatforms, activeTab])
 
   // Merge dynamic content with static content (gradients, colors, icons)
   const getPlatformConfig = (id: string) => {

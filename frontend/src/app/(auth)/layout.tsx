@@ -1,5 +1,5 @@
 'use client'
-import { ROUTES } from '@/constants/routes'
+import { ROUTES, getSafeRedirect } from '@/constants/routes'
 import useSettings from '@/hooks/useSettings'
 import LanguageDropdown from '@/layout/header/LanguageDropdown'
 import ThemeDropdown from '@/layout/header/ThemeDropdown'
@@ -31,7 +31,10 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
-      router.push(ROUTES.DASHBOARD)
+      // Runs right after login too, so it must honour redirect_to or it overrides LoginForm's redirect.
+      // window.location (not useSearchParams) keeps this layout free of a Suspense requirement.
+      const redirectTo = getSafeRedirect(new URLSearchParams(window.location.search).get('redirect_to'))
+      router.push(redirectTo || ROUTES.DASHBOARD)
     }
   }, [isLoading, isAuthenticated, router])
 

@@ -1,5 +1,11 @@
 const { db } = require('../models');
 const ContactInquiry = db.ContactInquiry;
+const LandingPage = require('../models/landing-page.model');
+const EmailDispatcher = require('../services/emailDispatcher');
+
+// Visitor input goes into an HTML email body; escape it so a message can't inject markup/links
+const escapeHtml = (s) =>
+  String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
 exports.getAllInquiries = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
@@ -77,6 +83,22 @@ exports.createInquiry = async (req, res) => {
 
   try {
     await ContactInquiry.create({ name, email, subject, message });
+
+    // Notify the inbox shown on the landing page. Not awaited (same as welcome-message): the inquiry is
+    // already saved, so a slow or failing SMTP (e.g. not configured) is logged instead of blocking the visitor.
+    const landing = await LandingPage.findOne().select('contact.email').lean();
+    const to = landing?.contact?.email;
+    if (to) {
+      EmailDispatcher.dispatch(to, 'contact-inquiry', {
+        name: escapeHtml(name),
+        email: escapeHtml(email),
+        subject: escapeHtml(subject),
+        message: escapeHtml(message).replace(/\n/g, '<br>'),
+      }).then((result) => {
+        if (!result?.success) console.error('[createInquiry] Notification email not sent:', result?.message);
+      });
+    }
+
     return res.status(200).json({ message: 'Contact inquiry created successfully' });
   } catch (error) {
     console.error('Error in createInquiry:', error);

@@ -125,7 +125,7 @@ export default function LandingPricing({ data }: { data?: LandingPageData['prici
                     {...animProps}
                     opacity={opacity}
                     t={t}
-                    onPlanClick={() => router.push(ROUTES.PLANS)}
+                    onPlanClick={() => router.push(`${ROUTES.AUTH.LOGIN}?redirect_to=${encodeURIComponent(ROUTES.PLANS)}`)}
                   />
                 )
               })}
@@ -174,7 +174,7 @@ export default function LandingPricing({ data }: { data?: LandingPageData['prici
                       {...animProps}
                       opacity={opacity}
                       t={t}
-                      onPlanClick={() => router.push(ROUTES.PLANS)}
+                      onPlanClick={() => router.push(`${ROUTES.AUTH.LOGIN}?redirect_to=${encodeURIComponent(ROUTES.PLANS)}`)}
                     />
                   </SwiperSlide>
                 )
