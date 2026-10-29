@@ -89,7 +89,7 @@ const defaultSettings = {
 
   facebook_app_id: null,
   facebook_app_secret: null,
-  facebook_api_version: 'v18.0',
+  facebook_api_version: 'v24.0',
   threads_app_id: null,
   threads_app_secret: null,
   linkedin_client_id: '',

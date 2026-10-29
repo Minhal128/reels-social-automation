@@ -134,7 +134,7 @@ export const BrandPlacement = ({
                   <input
                     type="file"
                     id={`input-${item.key}`}
-                    accept="image/*"
+                    accept="image/*,.svg,image/svg+xml"
                     className="hidden"
                     onChange={(e) => {
                       const file = e.target.files?.[0]
@@ -142,7 +142,6 @@ export const BrandPlacement = ({
                     }}
                   />
 
-                  {/* Logo Preview Container */}
                   <div className="space-y-2 pt-3">
                     <span className="font-semibold text-subtitle-color text-xs block">
                       {t('logo_preview', { defaultValue: 'Logo Preview & Editing:' })}
@@ -154,28 +153,34 @@ export const BrandPlacement = ({
                         if (fileInput) (fileInput as HTMLInputElement).click()
                       }}
                       className={cn(
-                        "w-full h-36 rounded-xl flex items-center justify-center border border-dashed border-glass-border cursor-pointer relative overflow-hidden group/preview shadow-inner",
-                        (item.key === 'logo_dark' || item.key === 'sidebar_logo')
-                          ? "bg-slate-900 border-white/20"
-                          : "bg-slate-100 dark:bg-slate-950/20 border-slate-300"
+                        'w-full h-40 rounded-2xl flex items-center justify-center border border-dashed cursor-pointer relative overflow-hidden group/preview',
+                        item.key === 'logo_dark' || item.key === 'sidebar_logo'
+                          ? 'bg-[#0B1220] border-white/15'
+                          : 'bg-[#F4F6F8] dark:bg-slate-950/40 border-slate-300/80 dark:border-white/10',
                       )}
                     >
-                      {/* Grid background pattern */}
-                      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.05)_1px,transparent_1px)] bg-[size:12px_12px] opacity-100" />
+                      <div className="absolute inset-0 opacity-[0.35] bg-[radial-gradient(circle_at_30%_20%,rgba(99,102,241,0.18),transparent_45%),radial-gradient(circle_at_80%_70%,rgba(14,165,233,0.12),transparent_40%)]" />
 
                       {activeUrl ? (
                         <img
-                          src={activeUrl}
+                          src={
+                            activeUrl.includes('blob:')
+                              ? activeUrl
+                              : `${activeUrl}${activeUrl.includes('?') ? '&' : '?'}v=${encodeURIComponent(String(item.url || ''))}`
+                          }
                           alt={item.label}
                           className={cn(
-                            "object-contain max-w-[85%] max-h-[75%] relative z-10 transition-transform duration-300 group-hover/preview:scale-105",
-                            item.key === 'favicon' ? 'w-12 h-12' : 'w-auto'
+                            'object-contain max-w-[85%] max-h-[75%] relative z-10 transition-transform duration-300 group-hover/preview:scale-105',
+                            item.key === 'favicon' ? 'w-14 h-14 rounded-lg shadow-sm' : 'w-auto',
                           )}
                         />
                       ) : (
                         <div className="flex flex-col items-center gap-1.5 text-slate-400 dark:text-slate-500 relative z-10">
                           <ImageIcon className="w-8 h-8 opacity-60" />
-                          <span className="text-[10px] font-semibold">{t('no_logo_uploaded', { defaultValue: 'No logo uploaded' })}</span>
+                          <span className="text-[10px] font-semibold">
+                            {t('no_logo_uploaded', { defaultValue: 'No logo uploaded' })}
+                          </span>
+                          <span className="text-[10px] opacity-70">PNG · SVG · WEBP</span>
                         </div>
                       )}
 

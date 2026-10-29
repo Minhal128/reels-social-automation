@@ -172,6 +172,7 @@ env_set  APP_ID          "$APP_ID_VALUE"          # enforce documented value (al
 env_set  APP_URL         "https://${DOMAIN}"
 env_set  SERVER_ADDR     "$SERVER_ADDR"
 env_set  ALLOWED_ORIGINS "$FRONTEND_ORIGIN"
+env_set  FRONTEND_URL    "$FRONTEND_ORIGIN"       # email reset links + payment redirects
 env_set  NODE_ENV        "production"
 env_set  PORT            "$PORT"
 env_set  APP_DEMO_MODE   "$APP_DEMO_MODE"
@@ -181,6 +182,7 @@ env_set  ADMIN_EMAIL     "$ADMIN_EMAIL"
 env_fill MONGODB_URI          "mongodb://127.0.0.1:27017/${MONGO_DB}"   # keeps a pre-set Atlas URI
 env_fill JWT_SECRET           "$(openssl rand -hex 32)"
 env_fill TOKEN_ENCRYPTION_KEY "$(openssl rand -hex 32)"
+env_fill SESSION_SECRET       "$(openssl rand -hex 32)"   # app.js falls back to a hardcoded secret otherwise
 
 # Admin password: replace only the shipped default/empty, then record it:
 cur_ap="$(env_get ADMIN_PASSWORD)"

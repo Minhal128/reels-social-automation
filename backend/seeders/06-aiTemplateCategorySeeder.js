@@ -1,5 +1,8 @@
+const path = require('path');
+const { seedAttachment } = require('../helpers/seedAttachment');
+
 exports.up = async ({ db }, mongoose) => {
-  const { AITemplateCategory } = db;
+  const { AITemplateCategory, Attachment } = db;
   try {
     const categories = [
       { name: 'Futuristic', slug: 'futuristic', description: 'Advanced technology and sci-fi aesthetics.' },
@@ -10,9 +13,20 @@ exports.up = async ({ db }, mongoose) => {
     ];
 
     for (const cat of categories) {
+      const image = await seedAttachment(Attachment, {
+        srcPath: path.join(process.cwd(), 'public', 'templates', `${cat.slug}.jpg`),
+        destSubDir: 'templates',
+        fileName: `${cat.slug}.jpg`,
+        mimeType: 'image/jpeg',
+        fileType: 'image',
+      });
+
       const existing = await AITemplateCategory.findOne({ slug: cat.slug });
       if (!existing) {
-        await new AITemplateCategory(cat).save();
+        await new AITemplateCategory({ ...cat, attachment_id: image ? image._id : null }).save();
+      } else if (!existing.attachment_id && image) {
+        existing.attachment_id = image._id;
+        await existing.save();
       }
     }
 

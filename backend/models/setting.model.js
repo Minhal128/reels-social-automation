@@ -272,7 +272,7 @@ const SettingSchema = new Schema(
 
     facebook_app_id: { type: String, default: null },
     facebook_app_secret: { type: String, default: null },
-    facebook_api_version: { type: String, default: 'v18.0' },
+    facebook_api_version: { type: String, default: 'v24.0' },
     threads_app_id: { type: String, default: null },
     threads_app_secret: { type: String, default: null },
     linkedin_client_id: { type: String, default: '' },

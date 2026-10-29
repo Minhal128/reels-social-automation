@@ -147,7 +147,7 @@ export default function LandingTestimonials({
                                 ? process.env.NEXT_PUBLIC_STORAGE_URL +
                                 (testimonial.user_image.startsWith('/') ? '' : '/') +
                                 testimonial.user_image
-                                : testimonial.avatar || '/images/default-avatar.png'
+                                : testimonial.avatar || '/images/placeholder.png'
                             }
                             alt={testimonial.user_name || testimonial.name || 'User'}
                             fill

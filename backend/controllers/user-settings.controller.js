@@ -65,7 +65,7 @@ exports.getUserSetting = async (req, res) => {
 
     const publicData = settings ? {
       facebook_app_id: settings.facebook_app_id || null,
-      facebook_api_version: settings.facebook_api_version || 'v18.0',
+      facebook_api_version: settings.facebook_api_version || 'v24.0',
       linkedin_client_id: settings.linkedin_client_id || '',
       twitter_client_id: settings.twitter_client_id || '',
     } : null;

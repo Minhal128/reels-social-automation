@@ -6,8 +6,8 @@ exports.up = async ({ db }, mongoose) => {
 
     const models = [
       {
-        name: 'Gemini 2.0 Flash',
-        model_id: 'gemini-2.0-flash',
+        name: 'Gemini 3.8 Flash',
+        model_id: 'gemini-3.8-flash',
         provider: 'gemini',
         api_key: geminiApiKey,
         is_default: true,
@@ -17,8 +17,19 @@ exports.up = async ({ db }, mongoose) => {
         max_output_tokens: 500
       },
       {
-        name: 'Gemini 2.0 Flash Lite',
-        model_id: 'gemini-2.0-flash-lite',
+        name: 'Gemini 3.6 Flash',
+        model_id: 'gemini-3.6-flash',
+        provider: 'gemini',
+        api_key: geminiApiKey,
+        is_default: false,
+        is_active: true,
+        credit_cost: 10,
+        description: 'Balanced model for everyday caption generation',
+        max_output_tokens: 500
+      },
+      {
+        name: 'Gemini 3.5 Flash Lite',
+        model_id: 'gemini-3.5-flash-lite',
         provider: 'gemini',
         api_key: geminiApiKey,
         is_default: false,
@@ -81,50 +92,25 @@ exports.up = async ({ db }, mongoose) => {
         credit_cost: 12,
         description: 'Cost-effective OpenAI model for general caption generation',
         max_output_tokens: 500
-      },
-      {
-        name: 'GPT-4 Turbo',
-        model_id: 'gpt-4-turbo',
-        provider: 'openai',
-        api_key: openaiApiKey,
-        is_default: false,
-        is_active: true,
-        credit_cost: 18,
-        description: 'Enhanced GPT-4 with improved performance and knowledge',
-        max_output_tokens: 500
-      },
-      {
-        name: 'o1 Mini',
-        model_id: 'o1-mini',
-        provider: 'openai',
-        api_key: openaiApiKey,
-        is_default: false,
-        is_active: true,
-        credit_cost: 15,
-        description: 'Reasoning-optimized model for strategic caption creation',
-        max_output_tokens: 500
-      },
-      {
-        name: 'o3 Mini',
-        model_id: 'o3-mini',
-        provider: 'openai',
-        api_key: openaiApiKey,
-        is_default: false,
-        is_active: true,
-        credit_cost: 16,
-        description: 'Latest generation model with advanced capabilities',
-        max_output_tokens: 500
       }
     ];
 
     for (const model of models) {
       const existing = await AICaptionModel.findOne({ model_id: model.model_id });
       if (existing) {
-        await AICaptionModel.updateOne({ model_id: model.model_id }, { $set: model });
+        const update = { ...model };
+        if (update.api_key.endsWith('_REQUIRED')) delete update.api_key; // keep a key the admin already saved
+        await AICaptionModel.updateOne({ model_id: model.model_id }, { $set: update });
       } else {
         await AICaptionModel.create(model);
       }
     }
+
+    // Shut down by the providers (see ai.google.dev/gemini-api/docs/deprecations, developers.openai.com/api/docs/deprecations).
+    await AICaptionModel.updateMany(
+      { model_id: { $in: ['gemini-2.0-flash', 'gemini-2.0-flash-lite', 'gpt-4-turbo', 'o1-mini', 'o3-mini'] } },
+      { $set: { is_active: false, is_default: false } }
+    );
     console.log('✅ AI Caption Models seeded/updated successfully.');
 
   } catch (error) {

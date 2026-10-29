@@ -138,7 +138,7 @@ export default function ModelDialog({
                 value={formik.values.name}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                placeholder="e.g., Gemini 2.0 Flash"
+                placeholder="e.g., Gemini 3.8 Flash"
               />
               {formik.touched.name && formik.errors.name && (
                 <p className="text-sm text-destructive text-left rtl:text-right">{formik.errors.name}</p>
@@ -153,7 +153,7 @@ export default function ModelDialog({
                 value={formik.values.model_id}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                placeholder="e.g., gemini-2.0-flash"
+                placeholder="e.g., gemini-3.8-flash"
                 disabled={isEditing}
               />
               {formik.touched.model_id && formik.errors.model_id && (

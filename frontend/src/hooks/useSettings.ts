@@ -15,10 +15,10 @@ const useSettings = () => {
     return authPaths.some(path => pathname === path || pathname.startsWith(path + '/'))
   }, [pathname])
 
-  // STRICT RULE: Only super_admin can ever access admin settings
-  // Regular users and non-authenticated users should ALWAYS use public settings
+  // Admin + super_admin both need admin settings so logo uploads refetch immediately
   const canAccessAdminSettings = useMemo(() => {
-    return !isAuthPage && isAuthenticated && user?.role === 'super_admin' && !!user?.id
+    const role = user?.role
+    return !isAuthPage && isAuthenticated && (role === 'super_admin' || role === 'admin') && !!user?.id
   }, [isAuthPage, isAuthenticated, user])
 
   const {

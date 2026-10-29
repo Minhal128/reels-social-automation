@@ -50,9 +50,9 @@ export default function LandingFooter({ data }: { data?: LandingPageData['footer
               <Image
                 src={landingLogoUrl as string}
                 alt={settings?.app_name || 'Logo'}
-                width={10}
-                height={10}
-                className="h-10 w-auto object-contain transition-all duration-300"
+                width={180}
+                height={40}
+                className="h-10 w-auto max-w-[180px] object-contain object-left transition-all duration-300"
                 unoptimized
               />
             </Link>

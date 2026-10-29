@@ -112,7 +112,10 @@ app.get('/uploads/*', async (req, res, next) => {
     if (isGenerated && createdBy) {
       const buffer = await getWatermarkedBuffer(filePath, createdBy, null);
       if (buffer) {
-        res.set('Content-Type', 'image/' + (ext === '.jpg' ? 'jpeg' : ext.substring(1)));
+        // ponytail: svg needs image/svg+xml or browsers ignore it as favicon/logo
+        const mime =
+          ext === '.svg' ? 'image/svg+xml' : ext === '.jpg' || ext === '.jpeg' ? 'image/jpeg' : 'image/' + ext.substring(1);
+        res.set('Content-Type', mime);
         return res.send(buffer);
       }
     }

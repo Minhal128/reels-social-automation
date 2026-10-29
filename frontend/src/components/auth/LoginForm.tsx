@@ -67,7 +67,8 @@ const LoginForm = () => {
 
       // Redirect to specified path or default dashboard
       const redirectTo = searchParams.get('redirect_to')
-      if (redirectTo) {
+      // Same-origin paths only: blocks open redirects like ?redirect_to=https://evil.com or //evil.com
+      if (redirectTo && /^\/(?![/\\])/.test(redirectTo)) {
         router.replace(redirectTo)
       } else {
         router.replace(ROUTES.DASHBOARD)
