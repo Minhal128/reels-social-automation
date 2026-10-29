@@ -26,7 +26,9 @@ export function proxy(request: NextRequest) {
 
   // Redirect unauthenticated users to login if they try to access protected pages
   if (!token && isDashboardPage) {
-    return NextResponse.redirect(new URL(ROUTES.LANDING, request.url))
+    const login = new URL(ROUTES.AUTH.LOGIN, request.url)
+    login.searchParams.set('redirect_to', pathname + request.nextUrl.search)
+    return NextResponse.redirect(login)
   }
 
   // Redirect authenticated users to dashboard if they try to access auth pages

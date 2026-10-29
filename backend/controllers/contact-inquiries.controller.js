@@ -75,10 +75,15 @@ exports.getInquiryById = async (req, res) => {
 };
 
 exports.createInquiry = async (req, res) => {
-  const { name, email, subject, message } = req.body;
+  const [name, email, subject, message] = ['name', 'email', 'subject', 'message'].map((k) =>
+    typeof req.body?.[k] === 'string' ? req.body[k].trim() : ''
+  );
 
   if (!name || !email || !subject || !message) {
     return res.status(400).json({ message: 'All fields are required' });
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ message: 'Invalid email address' });
   }
 
   try {

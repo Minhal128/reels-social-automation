@@ -254,7 +254,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
           {/* Main Bot & Laptop Image */}
           <div className="absolute -bottom-[15%] z-40 w-[82%] aspect-[576/527] left-[9%] lg:left-[14%] xl:left-[12%] 2xl:left-[9%]">
             <Image
-              src={!mounted ? '/images/auth/Bot.png' : (isDark ? '/images/auth/dark/bot.png' : '/images/auth/bot.png')}
+              src={!mounted ? '/images/auth/bot.png' : (isDark ? '/images/auth/dark/bot.png' : '/images/auth/bot.png')}
               alt="ReelEase AI Bot"
               fill
               className="object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.15)]"
