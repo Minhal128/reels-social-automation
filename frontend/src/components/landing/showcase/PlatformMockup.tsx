@@ -35,7 +35,8 @@ export function PlatformMockup({
   currentContent,
 }: any) {
   return (
-    <div className="flex-1 relative w-full flex justify-center">
+    // Decorative preview: its Follow/Subscribe buttons are fake, so keep them out of clicks, tab order and screen readers
+    <div className="flex-1 relative w-full flex justify-center" inert aria-hidden="true">
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 40 }}
         whileInView={{ opacity: 1, scale: 1, y: 0 }}

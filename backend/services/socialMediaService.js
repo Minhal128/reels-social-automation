@@ -10,7 +10,7 @@ const Notification = db.Notification;
 const fileHelper = require('../utils/fileHelper');
 const sharp = require('sharp');
 const { google } = require('googleapis');
-const DEFAULT_FACEBOOK_API_VERSION = 'v19.0';
+const DEFAULT_FACEBOOK_API_VERSION = 'v24.0';
 
 class SocialMediaService {
 

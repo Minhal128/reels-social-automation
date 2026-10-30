@@ -25,11 +25,11 @@ const getPopulatedLandingPage = () => {
     }).populate('pricing.plan_ids')
     .populate({
       path: 'blog.blog_ids',
-      select: 'title slug description thumbnail_id created_at',
-      populate: {
-        path: 'thumbnail_id',
-        select: 'file_path'
-      }
+      select: 'title slug description thumbnail_id categories read_time status published_at created_at',
+      populate: [
+        { path: 'thumbnail_id', select: 'file_path' },
+        { path: 'categories', select: 'name' }
+      ]
     }).populate('testimonials.testimonial_ids').populate('faq.faq_ids');
 };
 

@@ -1,7 +1,7 @@
 'use client'
 import AuthInput from '@/components/auth/AuthInput'
 import { Button } from '@/components/ui/button'
-import { ROUTES } from '@/constants/routes'
+import { ROUTES, getSafeRedirect } from '@/constants/routes'
 import { useGetDemoCredentialsQuery, useLoginMutation } from '@/redux/api/authApi'
 import { useAppDispatch } from '@/redux/hooks'
 import { setAuth } from '@/redux/slices/authSlice'
@@ -66,15 +66,16 @@ const LoginForm = () => {
       toast.success(response.message || t('login_successful'))
 
       // Redirect to specified path or default dashboard
-      const redirectTo = searchParams.get('redirect_to')
-      if (redirectTo) {
-        router.replace(redirectTo)
-      } else {
-        router.replace(ROUTES.DASHBOARD)
-      }
+      router.replace(getSafeRedirect(searchParams.get('redirect_to')) || ROUTES.DASHBOARD)
     } catch (error) {
       const apiError = error as ApiError
       const errorMessage = apiError?.data?.message || t('login_failed')
+      // Registered but never entered the OTP: send them to finish verification instead of a dead-end error
+      if (apiError?.data?.code === 'EMAIL_NOT_VERIFIED') {
+        toast.info(errorMessage)
+        router.push(`${ROUTES.AUTH.VERIFY_OTP}?email=${encodeURIComponent(values.email)}&type=register`)
+        return
+      }
       toast.error(errorMessage)
     }
   }

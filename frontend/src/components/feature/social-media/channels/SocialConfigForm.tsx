@@ -55,7 +55,7 @@ const SocialConfigForm = ({ initialValues, onSuccess }: SocialConfigFormProps) =
         initialValues={{
           facebook_app_id: initialValues?.facebook_app_id || '',
           facebook_app_secret: initialValues?.facebook_app_secret || '',
-          facebook_api_version: initialValues?.facebook_api_version || 'v19.0',
+          facebook_api_version: initialValues?.facebook_api_version || 'v24.0',
           threads_app_id: initialValues?.threads_app_id || '',
           threads_app_secret: initialValues?.threads_app_secret || '',
           linkedin_client_id: initialValues?.linkedin_client_id || '',
@@ -154,7 +154,7 @@ const SocialConfigForm = ({ initialValues, onSuccess }: SocialConfigFormProps) =
                               {...field}
                               type="text"
                               className="bg-muted/10 border-glass-border focus:border-primary max-w-xs"
-                              placeholder="v19.0"
+                              placeholder="v24.0"
                             />
                           )}
                         </Field>

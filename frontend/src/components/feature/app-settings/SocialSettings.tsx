@@ -16,7 +16,7 @@ const SocialSettings = () => {
   const initialValues = {
     facebook_app_id: settings.facebook_app_id || '',
     facebook_app_secret: settings.facebook_app_secret || '',
-    facebook_api_version: settings.facebook_api_version || 'v19.0',
+    facebook_api_version: settings.facebook_api_version || 'v24.0',
     threads_app_id: settings.threads_app_id || '',
     threads_app_secret: settings.threads_app_secret || '',
     linkedin_client_id: settings.linkedin_client_id || '',

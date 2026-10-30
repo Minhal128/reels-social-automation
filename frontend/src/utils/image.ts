@@ -6,7 +6,7 @@ export const isAbsoluteUrl = (url: string): boolean => {
 };
 
 export const getResolvedImageUrl = (src: any, fallbackSrc?: string): string => {
-  const defaultPlaceholder = `${ImagePath}/default3.png`;
+  const defaultPlaceholder = `${ImagePath}/placeholder.png`;
 
   if (!src) {
     return fallbackSrc || defaultPlaceholder;
@@ -56,10 +56,6 @@ export const getResolvedImageUrl = (src: any, fallbackSrc?: string): string => {
 
     if (sourceString.startsWith("./")) {
       return `${baseUrl}${sourceString.replace("./", "")}`;
-    }
-
-    if (sourceString.startsWith("/images/")) {
-      return `/assets${sourceString}`;
     }
 
     if (sourceString.startsWith("/")) {

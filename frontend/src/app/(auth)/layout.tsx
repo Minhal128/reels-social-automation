@@ -1,5 +1,5 @@
 'use client'
-import { ROUTES } from '@/constants/routes'
+import { ROUTES, getSafeRedirect } from '@/constants/routes'
 import useSettings from '@/hooks/useSettings'
 import LanguageDropdown from '@/layout/header/LanguageDropdown'
 import ThemeDropdown from '@/layout/header/ThemeDropdown'
@@ -31,7 +31,10 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
-      router.push(ROUTES.DASHBOARD)
+      // Runs right after login too, so it must honour redirect_to or it overrides LoginForm's redirect.
+      // window.location (not useSearchParams) keeps this layout free of a Suspense requirement.
+      const redirectTo = getSafeRedirect(new URLSearchParams(window.location.search).get('redirect_to'))
+      router.push(redirectTo || ROUTES.DASHBOARD)
     }
   }, [isLoading, isAuthenticated, router])
 
@@ -72,6 +75,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
             type="button"
             onClick={() => setTheme('light')}
             title="Light Mode"
+            aria-label="Switch to light mode"
             className={cn(
               "flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 cursor-pointer",
               resolvedTheme === 'light'
@@ -85,6 +89,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
             type="button"
             onClick={() => setTheme('dark')}
             title="Dark Mode"
+            aria-label="Switch to dark mode"
             className={cn(
               "flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 cursor-pointer",
               resolvedTheme === 'dark'
@@ -251,7 +256,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
           {/* Main Bot & Laptop Image */}
           <div className="absolute -bottom-[15%] z-40 w-[82%] aspect-[576/527] left-[9%] lg:left-[14%] xl:left-[12%] 2xl:left-[9%]">
             <Image
-              src={!mounted ? '/images/auth/Bot.png' : (isDark ? '/images/auth/dark/bot.png' : '/images/auth/bot.png')}
+              src={!mounted ? '/images/auth/bot.png' : (isDark ? '/images/auth/dark/bot.png' : '/images/auth/bot.png')}
               alt="ReelEase AI Bot"
               fill
               className="object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.15)]"

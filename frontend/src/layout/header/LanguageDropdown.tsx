@@ -127,6 +127,7 @@ const LanguageDropdown = ({ variant = 'default' }: LanguageDropdownProps) => {
       <Button
         variant="ghost"
         disabled
+        aria-label={t('lang_label')}
         className="flex items-center p-0! gap-1.5 h-9 w-9 sm:h-11 sm:w-11 transition-all duration-300 group opacity-50 rounded-full!"
       >
         <div className="flex items-center justify-center text-primary ">

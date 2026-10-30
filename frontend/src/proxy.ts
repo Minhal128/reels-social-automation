@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { ROUTES } from './constants/routes'
+import { ROUTES, getSafeRedirect } from './constants/routes'
 
 export function proxy(request: NextRequest) {
   const token = request.cookies.get('authToken')?.value
@@ -26,12 +26,15 @@ export function proxy(request: NextRequest) {
 
   // Redirect unauthenticated users to login if they try to access protected pages
   if (!token && isDashboardPage) {
-    return NextResponse.redirect(new URL(ROUTES.LANDING, request.url))
+    const login = new URL(ROUTES.AUTH.LOGIN, request.url)
+    login.searchParams.set('redirect_to', pathname + request.nextUrl.search)
+    return NextResponse.redirect(login)
   }
 
   // Redirect authenticated users to dashboard if they try to access auth pages
   if (token && isAuthPage) {
-    return NextResponse.redirect(new URL(ROUTES.DASHBOARD, request.url))
+    const redirectTo = getSafeRedirect(request.nextUrl.searchParams.get('redirect_to'))
+    return NextResponse.redirect(new URL(redirectTo || ROUTES.DASHBOARD, request.url))
   }
 
   // Handle root path redirect if token exists or rely on next.config.ts if not

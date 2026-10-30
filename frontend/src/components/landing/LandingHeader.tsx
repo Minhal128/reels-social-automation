@@ -85,10 +85,10 @@ export default function LandingHeader() {
               <Image
                 src={landingLogoUrl as string}
                 alt={settings?.app_name || "Logo"}
-                width={10}
-                height={10}
+                width={180}
+                height={40}
                 className={cn(
-                  'h-7 sm:h-9 md:h-10 w-auto object-contain transition-all duration-300 scale-100',
+                  'h-7 sm:h-9 md:h-10 w-auto max-w-[180px] object-contain object-left transition-all duration-300 scale-100',
                   scrolled ? 'scale-95' : 'scale-100',
                 )}
                 unoptimized

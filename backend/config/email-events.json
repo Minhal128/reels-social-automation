@@ -75,5 +75,19 @@
     ],
     "default_subject": "Registration OTP - {{app_name}}",
     "default_content": "<p>Hello {{user_name}},</p><p>Your OTP code to verify your email for registration is: <strong>{{otp_code}}</strong></p><p>If you did not request this, please ignore this email.</p>"
+  },
+  "contact-inquiry": {
+    "name": "Contact Inquiry",
+    "description": "Sent to the landing page contact email when a visitor submits the contact form.",
+    "slug": "contact-inquiry",
+    "shortcodes": [
+      { "type": "variable", "text": "Name", "action": "{{name}}" },
+      { "type": "variable", "text": "Email", "action": "{{email}}" },
+      { "type": "variable", "text": "Subject", "action": "{{subject}}" },
+      { "type": "variable", "text": "Message", "action": "{{message}}" },
+      { "type": "variable", "text": "Application Name", "action": "{{app_name}}" }
+    ],
+    "default_subject": "New contact inquiry: {{subject}}",
+    "default_content": "<p>New message from the {{app_name}} contact form.</p><p><strong>Name:</strong> {{name}}<br><strong>Email:</strong> {{email}}<br><strong>Subject:</strong> {{subject}}</p><p><strong>Message:</strong><br>{{message}}</p>"
   }
 }

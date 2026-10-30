@@ -1,7 +1,7 @@
 const Setting = require('../models/setting.model');
 
 const defaultSettings = {
-  app_name: 'My Application',
+  app_name: 'ReelEase',
   app_description: 'A modern AI Builder application',
   app_email: 'support@example.com',
   support_email: 'support@example.com',
@@ -89,7 +89,7 @@ const defaultSettings = {
 
   facebook_app_id: null,
   facebook_app_secret: null,
-  facebook_api_version: 'v18.0',
+  facebook_api_version: 'v24.0',
   threads_app_id: null,
   threads_app_secret: null,
   linkedin_client_id: '',

@@ -6,7 +6,7 @@ exports.up = async ({ db }, mongoose) => {
     const textToImageConfig = {
       enabled: true,
       base_url: 'https://api.kie.ai',
-      api_key: '',
+      api_key: process.env.KIE_API_KEY || '',
       auth_type: 'Bearer Token',
       create_job_request: {
         method: 'POST',
@@ -27,7 +27,7 @@ exports.up = async ({ db }, mongoose) => {
     const imageToImageConfig = {
       enabled: true,
       base_url: 'https://api.kie.ai',
-      api_key: '',
+      api_key: process.env.KIE_API_KEY || '',
       auth_type: 'Bearer Token',
       create_job_request: {
         method: 'POST',
@@ -48,7 +48,7 @@ exports.up = async ({ db }, mongoose) => {
     const videoMotionConfig = {
       enabled: true,
       base_url: 'https://api.kie.ai',
-      api_key: '',
+      api_key: process.env.KIE_API_KEY || '',
       auth_type: 'Bearer Token',
       create_job_request: {
         method: 'POST',
@@ -69,7 +69,7 @@ exports.up = async ({ db }, mongoose) => {
     const imagesToVideoConfig = {
       enabled: true,
       base_url: 'https://api.kie.ai',
-      api_key: '',
+      api_key: process.env.KIE_API_KEY || '',
       auth_type: 'Bearer Token',
       create_job_request: {
         method: 'POST',
@@ -90,7 +90,7 @@ exports.up = async ({ db }, mongoose) => {
     const textToVideoConfig = {
       enabled: true,
       base_url: 'https://api.kie.ai',
-      api_key: '',
+      api_key: process.env.KIE_API_KEY || '',
       auth_type: 'Bearer Token',
       create_job_request: {
         method: 'POST',
@@ -120,7 +120,7 @@ exports.up = async ({ db }, mongoose) => {
     if (existingProvider) {
       for (const feature of ['text_to_image', 'image_to_image', 'video_motion', 'images_to_video', 'text_to_video']) {
         if (existingProvider[feature]) {
-          providerData[feature].api_key = existingProvider[feature].api_key;
+          providerData[feature].api_key = existingProvider[feature].api_key || providerData[feature].api_key;
           providerData[feature].enabled = existingProvider[feature].enabled;
         }
       }

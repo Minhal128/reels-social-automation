@@ -68,3 +68,7 @@ export const ROUTES = {
   NOTIFICATIONS: '/notifications',
   HOME: '/',
 } as const
+
+/** Post-login `redirect_to` target if it is a same-origin path; blocks open redirects like `https://evil.com` or `//evil.com`. */
+export const getSafeRedirect = (redirectTo: string | null | undefined): string | null =>
+  redirectTo && /^\/(?![/\\])/.test(redirectTo) ? redirectTo : null

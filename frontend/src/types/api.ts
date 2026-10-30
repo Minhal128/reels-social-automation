@@ -45,6 +45,7 @@ export interface GenericResponse {
 export interface ApiError {
   data?: {
     message?: string
+    code?: string
     error?: string
     errors?: string[]
   }

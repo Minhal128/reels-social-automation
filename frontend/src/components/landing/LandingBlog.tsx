@@ -51,8 +51,10 @@ export default function LandingBlog({ data }: { data?: LandingPageData['blog'] &
   const sectionTitle = data?.title || t('latest_from')
   const sectionDescription = data?.description || 'Choose the plan that fits your creative needs. Scale as you grow.'
 
-  const blogPosts: BlogPost[] = (data?.blog_ids || []).map((b: any, index: number) => ({
+  // Admin may pick posts that were later unpublished; their article page would 404.
+  const blogPosts: BlogPost[] = (data?.blog_ids || []).filter((b: any) => !b.status || b.status === 'published').map((b: any, index: number) => ({
     id: b._id || index,
+    slug: b.slug,
     title: b.title || 'Untitled Post',
     excerpt: b.description || 'No description available for this pulse of innovation.',
     image:
@@ -62,9 +64,9 @@ export default function LandingBlog({ data }: { data?: LandingPageData['blog'] &
         (typeof b.thumbnail_id === 'string' && b.thumbnail_id.length !== 24 ? b.thumbnail_id : ''),
       ) || 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1200',
     thumbnail_id: b.thumbnail_id,
-    date: formatDate(b.created_at),
+    date: formatDate(b.published_at || b.created_at),
     author: 'Admin',
-    readTime: '5 min read',
+    readTime: `${b.read_time || 5} min read`,
     category: b.categories?.[0]?.name || 'Insights',
   }))
 
@@ -190,7 +192,7 @@ export default function LandingBlog({ data }: { data?: LandingPageData['blog'] &
                       {t(activePost.title)}
                     </h3>
                     <p className="text-white/60 text-lg line-clamp-2 text-wrap mb-2">{t(activePost.excerpt)}</p>
-                    <Link href={ROUTES.AUTH.LOGIN}>
+                    <Link href={activePost.slug ? `/articles/${activePost.slug}` : ROUTES.AUTH.LOGIN}>
                       <Button className="flex items-center gap-2 bg-white/10 hover:bg-primary! p-0! text-white! font-medium group/btn">
                         <span className="text-sm">Read Article</span>
                         <div className="rounded-full  flex items-center justify-center transition-colors">

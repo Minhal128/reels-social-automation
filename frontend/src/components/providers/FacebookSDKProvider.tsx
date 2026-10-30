@@ -18,7 +18,7 @@ export const FacebookSDKProvider = ({ children }: { children: React.ReactNode })
   const isInitializedRef = useRef(false)
   
   const appId = settings?.facebook_app_id || null
-  const apiVersion = settings?.facebook_api_version || 'v18.0'
+  const apiVersion = settings?.facebook_api_version || 'v24.0'
 
   useEffect(() => {
     if (appId) {
@@ -69,7 +69,7 @@ export const FacebookSDKProvider = ({ children }: { children: React.ReactNode })
                   appId: facebookAppId,
                   cookie: true,
                   xfbml: true,
-                  version: settings?.facebook_api_version || 'v18.0'
+                  version: settings?.facebook_api_version || 'v24.0'
                 })
                 isInitializedRef.current = true
                 setIsSDKReady(true)

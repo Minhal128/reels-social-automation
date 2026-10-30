@@ -144,9 +144,18 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
   const direction = useAppDirection()
 
+  // Logout / expired session (had a session in this mount) still goes to the landing page;
+  // a visitor who arrives logged out is sent to login and brought back to the page they wanted
+  const hadSessionRef = useRef(false)
+  if (isAuthenticated) hadSessionRef.current = true
+
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.push(ROUTES.LANDING)
+      router.push(
+        hadSessionRef.current
+          ? ROUTES.LANDING
+          : `${ROUTES.AUTH.LOGIN}?redirect_to=${encodeURIComponent(window.location.pathname + window.location.search)}`,
+      )
     }
   }, [isLoading, isAuthenticated, router])
 

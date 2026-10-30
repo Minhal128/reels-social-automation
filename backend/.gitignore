@@ -132,7 +132,9 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-package-lock.json
 uploads
 node_modules/
 locales/
+# Installer state (per machine — never commit)
+public/_migZip.xml
+public/installation.json

@@ -3,7 +3,14 @@ const { SocialAccount, SocialPost, Subscription, Setting, User, Role } = db;
 const socialMediaService = require('../services/socialMediaService');
 const { encryptToken, decryptToken } = require('../utils/encryption');
 const axios = require('axios');
+const crypto = require('crypto');
 const { google } = require('googleapis');
+
+// Twitter OAuth 2.0 PKCE (RFC 7636, S256). The verifier is derived from the server secret per user, so it never
+// leaves the server and needs no storage between building the auth URL and exchanging the code.
+const twitterPkceVerifier = (userId) =>
+  crypto.createHmac('sha256', process.env.JWT_SECRET).update(`twitter-pkce:${userId}`).digest('base64url');
+const pkceChallenge = (verifier) => crypto.createHash('sha256').update(verifier).digest('base64url');
 
 const checkChannelLimit = async (userId) => {
   try {
@@ -390,7 +397,7 @@ exports.getLinkedInSDKConfig = async (req, res) => {
     const userSettings = await Setting.findOne();
 
     if (!userSettings?.linkedin_client_id) {
-      return res.status(400).json({ message: 'LinkedIn Client ID not configured. Please add it in settings.' });
+      return res.status(200).json({ success: false, configured: false, message: 'LinkedIn Client ID not configured. Please add it in settings.', data: null });
     }
 
     const baseUrl = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
@@ -570,7 +577,7 @@ exports.getTwitterSDKConfig = async (req, res) => {
     const userSettings = await Setting.findOne();
 
     if (!userSettings?.twitter_consumer_key) {
-      return res.status(400).json({ message: 'Twitter credentials not configured. Please add them in settings.' });
+      return res.status(200).json({ success: false, configured: false, message: 'Twitter credentials not configured. Please add them in settings.', data: null });
     }
 
     const baseUrl = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
@@ -581,7 +588,7 @@ exports.getTwitterSDKConfig = async (req, res) => {
     const state = Buffer.from(JSON.stringify({ userId, platform: 'twitter' })).toString('base64');
 
     const authUrl = clientId
-      ? `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}&state=${state}&code_challenge=challenge&code_challenge_method=plain&prompt=login`
+      ? `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}&state=${state}&code_challenge=${pkceChallenge(twitterPkceVerifier(userId))}&code_challenge_method=S256&prompt=login`
       : null;
 
     res.status(200).json({
@@ -625,7 +632,7 @@ exports.connectTwitterAccount = async (req, res) => {
             grant_type: 'authorization_code',
             code,
             redirect_uri: callbackUri,
-            code_verifier: 'challenge'
+            code_verifier: twitterPkceVerifier(userId)
           }).toString(),
           {
             headers: {
@@ -1338,7 +1345,7 @@ exports.getYouTubeSDKConfig = async (req, res) => {
     const userSettings = await Setting.findOne();
 
     if (!userSettings?.youtube_client_id) {
-      return res.status(400).json({ message: 'YouTube Client ID not configured. Please add it in settings.' });
+      return res.status(200).json({ success: false, configured: false, message: 'YouTube Client ID not configured. Please add it in settings.', data: null });
     }
 
     const baseUrl = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
@@ -1482,7 +1489,7 @@ exports.getTikTokSDKConfig = async (req, res) => {
     const userSettings = await Setting.findOne();
 
     if (!userSettings?.tiktok_client_key) {
-      return res.status(400).json({ message: 'TikTok Client Key not configured. Please add it in settings.' });
+      return res.status(200).json({ success: false, configured: false, message: 'TikTok Client Key not configured. Please add it in settings.', data: null });
     }
 
     const baseUrl = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;

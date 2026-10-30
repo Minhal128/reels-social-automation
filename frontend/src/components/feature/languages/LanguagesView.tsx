@@ -120,7 +120,7 @@ export const LanguagesView = () => {
                 alt={row.name}
                 className="h-full w-full object-cover"
                 onError={(e) => {
-                  ; (e.target as HTMLImageElement).src = '/images/placeholder-flag.png'
+                  ; (e.target as HTMLImageElement).src = '/images/placeholder.png'
                 }}
               />
             ) : (

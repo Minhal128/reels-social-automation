@@ -9,8 +9,10 @@ const hashPassword = async (password) => {
 };
 
 const isValidEmail = (email) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
+  // Domain labels can't contain '.', so the regex can't backtrack: the old /[^\s@]+\.[^\s@]+$/ took ~1.3s on a
+  // 30KB crafted input (ReDoS). 254 is the RFC 5321 address length limit.
+  const emailRegex = /^[^\s@]+@[^\s@.]+(?:\.[^\s@.]+)+$/;
+  return typeof email === 'string' && email.length <= 254 && emailRegex.test(email);
 };
 
 const isValidPassword = (password) => {

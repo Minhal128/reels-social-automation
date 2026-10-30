@@ -612,7 +612,7 @@ exports.generateCaption = async (req, res) => {
         const completion = await openai.chat.completions.create({
           model: defaultModel.model_id,
           messages: messages,
-          max_tokens: defaultModel.max_output_tokens || 1500
+          max_completion_tokens: defaultModel.max_output_tokens || 1500
         });
 
         const responseText = completion.choices[0].message.content.trim();

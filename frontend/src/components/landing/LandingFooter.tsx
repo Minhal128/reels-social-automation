@@ -50,9 +50,9 @@ export default function LandingFooter({ data }: { data?: LandingPageData['footer
               <Image
                 src={landingLogoUrl as string}
                 alt={settings?.app_name || 'Logo'}
-                width={10}
-                height={10}
-                className="h-10 w-auto object-contain transition-all duration-300"
+                width={180}
+                height={40}
+                className="h-10 w-auto max-w-[180px] object-contain object-left transition-all duration-300"
                 unoptimized
               />
             </Link>
@@ -73,6 +73,9 @@ export default function LandingFooter({ data }: { data?: LandingPageData['footer
                   <motion.a
                     key={i}
                     href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={social.icon.replace(/Icon$/, '')}
                     whileHover={{ y: -3, scale: 1.1 }}
                     className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/60 hover:text-primary hover:border-primary/50 transition-all"
                   >

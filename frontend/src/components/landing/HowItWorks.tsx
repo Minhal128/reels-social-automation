@@ -9,6 +9,7 @@ import { useGetLandingPageQuery } from '@/redux/api/landingPageApi'
 import { getResolvedImageUrl } from '@/utils/image'
 import { ThreadsIcon } from '../ui/threadsIcon'
 import { TikTokIcon } from '@/components/ui/TikTokIcon'
+import { Fragment } from 'react'
 
 export default function HowItWorks() {
   const { t } = useTranslation()
@@ -164,16 +165,17 @@ export default function HowItWorks() {
         </div>
 
         {/* Platforms Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-3 md:gap-4 px-4 w-full">
+        {/* Grid below xl; one flex row at xl so each arrow sits centered in the gap between two equal chips */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:flex xl:items-center gap-3 md:gap-4 xl:gap-3 px-4 w-full">
           {platforms.map((platform, idx) => (
-            <div key={platform.id} className="flex-1 min-w-[130px] md:min-w-0 flex items-center justify-between gap-3 md:gap-4">
+            <Fragment key={platform.id}>
               <motion.div
                 // initial={{ opacity: 0, scale: 0.9 }}
                 // whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 // transition={{ duration: 0.5, delay: idx * 0.08 }}
                 // whileHover={{ y: -4 }}
-                className={`flex-1 flex items-center justify-center gap-2 md:gap-2.5 px-3.5 py-3.5 md:px-5 md:py-2.5 rounded-border-radius-inner bg-[#111118]/90 border ${platform.shadow} cursor-pointer group transition-transform  hover:-translate-y-2 duration-300 `}
+                className={`flex-1 min-w-0 flex items-center justify-center gap-2 md:gap-2.5 px-3.5 py-3.5 md:px-5 md:py-2.5 rounded-border-radius-inner bg-[#111118]/90 border ${platform.shadow} cursor-pointer group transition-transform  hover:-translate-y-2 duration-300 `}
               >
                 {/* Platform Icon */}
                 <div
@@ -190,11 +192,11 @@ export default function HowItWorks() {
 
               {/* Connector Arrow */}
               {idx < platforms.length - 1 && (
-                <span className="text-purple-400/80 text-xs md:text-sm font-light select-none shrink-0 hidden lg:flex ">
+                <span className="text-purple-400/80 select-none shrink-0 hidden xl:flex">
                   <ArrowRight className="w-4 h-4" strokeWidth={3} />
                 </span>
               )}
-            </div>
+            </Fragment>
           ))}
         </div>
 
