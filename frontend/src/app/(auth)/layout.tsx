@@ -75,6 +75,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
             type="button"
             onClick={() => setTheme('light')}
             title="Light Mode"
+            aria-label="Switch to light mode"
             className={cn(
               "flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 cursor-pointer",
               resolvedTheme === 'light'
@@ -88,6 +89,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
             type="button"
             onClick={() => setTheme('dark')}
             title="Dark Mode"
+            aria-label="Switch to dark mode"
             className={cn(
               "flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 cursor-pointer",
               resolvedTheme === 'dark'

@@ -397,7 +397,7 @@ exports.getLinkedInSDKConfig = async (req, res) => {
     const userSettings = await Setting.findOne();
 
     if (!userSettings?.linkedin_client_id) {
-      return res.status(400).json({ message: 'LinkedIn Client ID not configured. Please add it in settings.' });
+      return res.status(200).json({ success: false, configured: false, message: 'LinkedIn Client ID not configured. Please add it in settings.', data: null });
     }
 
     const baseUrl = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
@@ -577,7 +577,7 @@ exports.getTwitterSDKConfig = async (req, res) => {
     const userSettings = await Setting.findOne();
 
     if (!userSettings?.twitter_consumer_key) {
-      return res.status(400).json({ message: 'Twitter credentials not configured. Please add them in settings.' });
+      return res.status(200).json({ success: false, configured: false, message: 'Twitter credentials not configured. Please add them in settings.', data: null });
     }
 
     const baseUrl = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
@@ -1345,7 +1345,7 @@ exports.getYouTubeSDKConfig = async (req, res) => {
     const userSettings = await Setting.findOne();
 
     if (!userSettings?.youtube_client_id) {
-      return res.status(400).json({ message: 'YouTube Client ID not configured. Please add it in settings.' });
+      return res.status(200).json({ success: false, configured: false, message: 'YouTube Client ID not configured. Please add it in settings.', data: null });
     }
 
     const baseUrl = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
@@ -1489,7 +1489,7 @@ exports.getTikTokSDKConfig = async (req, res) => {
     const userSettings = await Setting.findOne();
 
     if (!userSettings?.tiktok_client_key) {
-      return res.status(400).json({ message: 'TikTok Client Key not configured. Please add it in settings.' });
+      return res.status(200).json({ success: false, configured: false, message: 'TikTok Client Key not configured. Please add it in settings.', data: null });
     }
 
     const baseUrl = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;

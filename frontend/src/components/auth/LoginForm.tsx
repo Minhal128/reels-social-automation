@@ -70,6 +70,12 @@ const LoginForm = () => {
     } catch (error) {
       const apiError = error as ApiError
       const errorMessage = apiError?.data?.message || t('login_failed')
+      // Registered but never entered the OTP: send them to finish verification instead of a dead-end error
+      if (apiError?.data?.code === 'EMAIL_NOT_VERIFIED') {
+        toast.info(errorMessage)
+        router.push(`${ROUTES.AUTH.VERIFY_OTP}?email=${encodeURIComponent(values.email)}&type=register`)
+        return
+      }
       toast.error(errorMessage)
     }
   }

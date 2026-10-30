@@ -157,6 +157,20 @@ exports.login = async (req, res) => {
 
     const user = await findUserByEmail(email);
     if (!user) {
+      // Until the OTP is verified the account only exists as a pending OTPLog. Say so — but only when the
+      // password matches, so this can't be used to discover which emails have a pending sign-up.
+      const pending = await OTPLog.findOne({
+        email: email.toLowerCase().trim(),
+        verified: false,
+        'metadata.password': { $exists: true },
+      }).sort({ created_at: -1 });
+      if (pending && (await bcrypt.compare(password, pending.metadata.password))) {
+        return res.status(403).json({
+          success: false,
+          code: 'EMAIL_NOT_VERIFIED',
+          message: 'Your email is not verified yet. Enter the OTP we sent you, or request a new one.',
+        });
+      }
       return res.status(400).json({ success: false, message: 'Invalid email or password.' });
     }
 
@@ -442,7 +456,7 @@ exports.verifyOTP = async (req, res) => {
 
 exports.resendOTP = async (req, res) => {
   try {
-    const { email } = req.body;
+    let { email } = req.body;
     const ip = req.ip;
 
     if (!email) {
@@ -455,7 +469,10 @@ exports.resendOTP = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Please provide a valid email address.' });
     }
 
+    email = email.toLowerCase().trim();
     const otpLog = await OTPLog.findOne({ email, verified: false, }).sort({ created_at: -1 });
+    // A pending registration keeps its name/password in metadata; losing it on resend made verification fail
+    const isRegistration = !!otpLog?.metadata?.password;
 
     let otp;
     let expiresAt = new Date(Date.now() + 10 * 60 * 1000);
@@ -467,6 +484,7 @@ exports.resendOTP = async (req, res) => {
         otp,
         expires_at: expiresAt,
         verified: false,
+        metadata: isRegistration ? otpLog.metadata : null,
       });
     } else {
       otp = otpLog.otp;
@@ -475,15 +493,17 @@ exports.resendOTP = async (req, res) => {
 
     if (process.env.APP_DEMO_MODE !== 'true' && email) {
       const user = await findUserByEmail(email);
-      const sent = await EmailDispatcher.dispatch(
-        email,
-        'password-reset-otp',
-        {
-          user_name: user ? user.name : 'User',
-          reset_url: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password`,
-          otp_code: otp
-        }
-      );
+      const sent = isRegistration
+        ? await EmailDispatcher.dispatch(email, 'registration-otp', { user_name: otpLog.metadata.name, otp_code: otp })
+        : await EmailDispatcher.dispatch(
+          email,
+          'password-reset-otp',
+          {
+            user_name: user ? user.name : 'User',
+            reset_url: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password`,
+            otp_code: otp
+          }
+        );
       if (!sent.success) {
         console.error('[Resend OTP] Email Error:', sent.message);
         return res.status(500).json({ message: 'Failed to send OTP email' });
