@@ -2,6 +2,7 @@ const { db } = require('../models');
 const ContactInquiry = db.ContactInquiry;
 const LandingPage = require('../models/landing-page.model');
 const EmailDispatcher = require('../services/emailDispatcher');
+const { isValidEmail } = require('../helpers/authHelpers');
 
 // Visitor input goes into an HTML email body; escape it so a message can't inject markup/links
 const escapeHtml = (s) =>
@@ -82,7 +83,7 @@ exports.createInquiry = async (req, res) => {
   if (!name || !email || !subject || !message) {
     return res.status(400).json({ message: 'All fields are required' });
   }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (!isValidEmail(email)) {
     return res.status(400).json({ message: 'Invalid email address' });
   }
 
@@ -99,9 +100,11 @@ exports.createInquiry = async (req, res) => {
         email: escapeHtml(email),
         subject: escapeHtml(subject),
         message: escapeHtml(message).replace(/\n/g, '<br>'),
-      }).then((result) => {
-        if (!result?.success) console.error('[createInquiry] Notification email not sent:', result?.message);
-      });
+      })
+        .then((result) => {
+          if (!result?.success) console.error('[createInquiry] Notification email not sent:', result?.message);
+        })
+        .catch((err) => console.error('[createInquiry] Notification email failed:', err));
     }
 
     return res.status(200).json({ message: 'Contact inquiry created successfully' });

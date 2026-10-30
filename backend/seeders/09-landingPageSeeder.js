@@ -95,49 +95,14 @@ async function up({ db: dbModels }) {
         section_heading: 'Everything You Need to Create Content',
         section_subheading: 'The all-in-one AI platform to create stunning images, videos, and social media content — in seconds.',
         items: [
-          {
-            title: 'Text to Image',
-            description: 'Transform your words into stunning, high-resolution visuals instantly using state-of-the-art AI models.',
-            image_id: featureImageId('Text to Image'),
-            color: 'text-blue-400',
-          },
-          {
-            title: 'Image to Image',
-            description: 'Engage with our intelligent AI that understands context and provides accurate, human-like responses.',
-            image_id: featureImageId('Image to Image'),
-            color: 'text-purple-400',
-          },
-          {
-            title: 'Text to Video',
-            description: 'Create cinematic, high-quality videos from simple text prompts in just a few clicks.',
-            image_id: featureImageId('Text to Video'),
-            color: 'text-pink-400',
-          },
-          {
-            title: 'Image to Video',
-            description: 'Bring your still images to life — animate photos and artwork into fluid, high-quality video clips with AI.',
-            image_id: featureImageId('Image to Video'),
-            color: 'text-cyan-400',
-          },
-          {
-            title: 'Video Motion',
-            description: 'Add dynamic motion effects, transitions, and cinematic camera moves to any video with a single prompt.',
-            image_id: featureImageId('Video Motion'),
-            color: 'text-emerald-400',
-          },
-          {
-            title: 'Character Generation',
-            description: 'Create consistent, high-quality characters for videos, ads, and animations with simple text prompts.',
-            image_id: featureImageId('Character Generation'),
-            color: 'text-emerald-400',
-          },
-          {
-            title: 'Ecommerce Catalogue',
-            description: 'Generate complete product catalogues with lifestyle shots, variations, and marketing copy in one click.',
-            image_id: featureImageId('Ecommerce Catalogue'),
-            color: 'text-emerald-400',
-          },
-        ],
+          ['Text to Image', 'Transform your words into stunning, high-resolution visuals instantly using state-of-the-art AI models.', 'text-blue-400'],
+          ['Image to Image', 'Engage with our intelligent AI that understands context and provides accurate, human-like responses.', 'text-purple-400'],
+          ['Text to Video', 'Create cinematic, high-quality videos from simple text prompts in just a few clicks.', 'text-pink-400'],
+          ['Image to Video', 'Bring your still images to life — animate photos and artwork into fluid, high-quality video clips with AI.', 'text-cyan-400'],
+          ['Video Motion', 'Add dynamic motion effects, transitions, and cinematic camera moves to any video with a single prompt.', 'text-emerald-400'],
+          ['Character Generation', 'Create consistent, high-quality characters for videos, ads, and animations with simple text prompts.', 'text-emerald-400'],
+          ['Ecommerce Catalogue', 'Generate complete product catalogues with lifestyle shots, variations, and marketing copy in one click.', 'text-emerald-400'],
+        ].map(([title, description, color]) => ({ title, description, image_id: featureImageId(title), color })),
       },
 
       social: {
